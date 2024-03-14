@@ -1,0 +1,12 @@
+{{- $ingressPATH := (index (index .Values.ingress.hosts 0).paths 0).path -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: environment-cm-{{ include "chemistry-pack.fullname" . }}
+  labels:
+    {{- include "chemistry-pack.labels" . | nindent 4 }}
+data:
+  SUBFOLDER: {{ $ingressPATH }}
+  TITLE: ChemistryPack
+  CUSTOM_USER: {{ .Values.settings.user }}
+  PASSWORD: {{ .Values.settings.password }}

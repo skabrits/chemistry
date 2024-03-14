@@ -1,0 +1,78 @@
+{{- $ingressPATH := (index (index .Values.ingress.hosts 0).paths 0).path -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}
+  labels:
+    {{- include "chemistry-pack.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "chemistry-pack.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "chemistry-pack.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+            - name: https
+              containerPort: 3001
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ $ingressPATH }}
+              port: http
+              httpHeaders:
+              - name: Authorization
+                value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
+          readinessProbe:
+            httpGet:
+              path: {{ $ingressPATH }}
+              port: http
+              httpHeaders:
+              - name: Authorization
+                value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          envFrom:
+          - configMapRef:
+              name: environment-cm-{{ include "chemistry-pack.fullname" . }}
+          volumeMounts:
+          - mountPath: "/config"
+            name: data-storage
+      volumes:
+      - name: data-storage
+        persistentVolumeClaim:
+          claimName: pvc-{{ include "chemistry-pack.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
