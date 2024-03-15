@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: skabrits/chemestry
+  repository: skabrits/chemistry-pack
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "novnc"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""

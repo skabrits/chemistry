@@ -60,10 +60,22 @@ spec:
           volumeMounts:
           - mountPath: "/config"
             name: data-storage
+          - name: service-config
+            mountPath: /custom-services.d
+          - name: script-config
+            mountPath: /custom-cont-init.d
       volumes:
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
+      - name: service-config
+        configMap:
+          name: service-cm-{{ include "chemistry-pack.fullname" . }}
+          defaultMode: 777
+      - name: script-config
+        configMap:
+          name: script-cm-{{ include "chemistry-pack.fullname" . }}
+          defaultMode: 777
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
