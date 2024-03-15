@@ -71,11 +71,11 @@ spec:
       - name: service-config
         configMap:
           name: service-cm-{{ include "chemistry-pack.fullname" . }}
-          defaultMode: 777
+          defaultMode: 0777
       - name: script-config
         configMap:
           name: script-cm-{{ include "chemistry-pack.fullname" . }}
-          defaultMode: 777
+          defaultMode: 0777
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
