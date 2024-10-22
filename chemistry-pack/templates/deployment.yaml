@@ -64,7 +64,13 @@ spec:
             mountPath: /custom-services.d
           - name: script-config
             mountPath: /custom-cont-init.d
+          - mountPath: /dev/shm
+            name: dshm
+            
       volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
