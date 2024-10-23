@@ -69,8 +69,7 @@ spec:
             
       volumes:
       - name: dshm
-        emptyDir:
-          medium: Memory
+        emptyDir: {}
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
