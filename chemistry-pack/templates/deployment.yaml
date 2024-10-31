@@ -73,7 +73,7 @@ spec:
       - name: dshm
         emptyDir:
           medium: "Memory"
-          sizeLimit: 32Gi
+          sizeLimit: 4Gi
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
