@@ -62,8 +62,8 @@ spec:
           volumeMounts:
           - mountPath: "/config"
             name: data-storage
-          - name: service-config
-            mountPath: /custom-services.d
+          # - name: service-config
+          #   mountPath: /custom-services.d
           - name: script-config
             mountPath: /custom-cont-init.d
           # - mountPath: /dev/shm
@@ -77,10 +77,10 @@ spec:
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
-      - name: service-config
-        configMap:
-          name: service-cm-{{ include "chemistry-pack.fullname" . }}
-          defaultMode: 0777
+      # - name: service-config
+      #   configMap:
+      #     name: service-cm-{{ include "chemistry-pack.fullname" . }}
+      #     defaultMode: 0777
       - name: script-config
         configMap:
           name: script-cm-{{ include "chemistry-pack.fullname" . }}
