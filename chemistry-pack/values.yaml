@@ -54,6 +54,7 @@ ingress:
 settings:
   user: slava
   password: Chem-123
+  kasm: "false"
 
 pvc:
   mode: ReadWriteMany
