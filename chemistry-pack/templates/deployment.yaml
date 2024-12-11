@@ -1,4 +1,10 @@
 {{- $ingressPATH := (index (index .Values.ingress.hosts 0).paths 0).path -}}
+{{- $gpuKEY := "nvidia.com/gpu" -}}
+{{- $encoder := "x264enc" -}}
+{{- if or (and (hasKey .Values.resources "requests") (hasKey .Values.resources.requests $gpuKEY)) (and (hasKey .Values.resources "limits") (hasKey .Values.resources.limits $gpuKEY)) }}
+Hello: world
+{{- $encoder = "nvh264enc" -}}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,10 +41,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 3000
-              protocol: TCP
-            - name: https
-              containerPort: 3001
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -56,24 +59,55 @@ spec:
                 value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: TZ
+            value: "UTC"
+          - name: DISPLAY_SIZEW
+            value: "1920"
+          - name: DISPLAY_SIZEH
+            value: "1080"
+          - name: DISPLAY_REFRESH
+            value: "60"
+          - name: DISPLAY_DPI
+            value: "96"
+          - name: DISPLAY_CDEPTH
+            value: "24"
+          - name: KASMVNC_ENABLE
+            value: "true"
+          - name: SELKIES_ENCODER
+            value: {{ quote $encoder }}
+          - name: SELKIES_ENABLE_RESIZE
+            value: "false"
+          - name: SELKIES_VIDEO_BITRATE
+            value: "8000"
+          - name: SELKIES_FRAMERATE
+            value: "60"
+          - name: SELKIES_AUDIO_BITRATE
+            value: "128000"
+          - name: SELKIES_ENABLE_BASIC_AUTH
+            value: "true"
+          - name: SELKIES_ENABLE_HTTPS
+            value: "false"
+          stdin: true
+          tty: true
           envFrom:
           - configMapRef:
               name: environment-cm-{{ include "chemistry-pack.fullname" . }}
           volumeMounts:
-          - mountPath: "/config"
+          - mountPath: "/home/ubuntu"
             name: data-storage
-          # - name: service-config
-          #   mountPath: /custom-services.d
-          - name: script-config
-            mountPath: /custom-cont-init.d
+          - mountPath: /cache
+            name: cache-vol
           - mountPath: /dev/shm
             name: dshm
-            
       volumes:
       - name: dshm
         emptyDir:
           medium: "Memory"
           sizeLimit: 4Gi
+      - name: cache-vol
+        persistentVolumeClaim:
+          claimName: cache-pvc-{{ include "chemistry-pack.fullname" . }}
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}

@@ -1,4 +1,3 @@
-{{- $ingressPATH := (index (index .Values.ingress.hosts 0).paths 0).path -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +5,5 @@ metadata:
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
 data:
-  SUBFOLDER: {{ $ingressPATH }}
-  TITLE: ChemistryPack
-  CUSTOM_USER: {{ .Values.settings.user }}
-  PASSWORD: {{ .Values.settings.password }}
+  SELKIES_BASIC_AUTH_USER: {{ .Values.settings.user }}
+  SELKIES_BASIC_AUTH_PASSWORD: {{ .Values.settings.password }}
