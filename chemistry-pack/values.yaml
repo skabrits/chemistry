@@ -38,7 +38,6 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-ssl-verify: "false"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/preserve-trailing-slash: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: 10000m
     cert-manager.io/cluster-issuer: letsencrypt-cluster
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
