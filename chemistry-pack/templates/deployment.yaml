@@ -3,7 +3,7 @@
 {{- $encoder := "x264enc" -}}
 {{- if or (and (hasKey .Values.resources "requests") (hasKey .Values.resources.requests $gpuKEY)) (and (hasKey .Values.resources "limits") (hasKey .Values.resources.limits $gpuKEY)) }}
 Hello: world
-{{- $encoder = "nvh264enc" -}}
+{{- $encoder = .Values.setting.encoder | default "nvh264enc" -}}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
