@@ -73,7 +73,7 @@ spec:
           - name: DISPLAY_CDEPTH
             value: "24"
           - name: KASMVNC_ENABLE
-            value: "true"
+            value: {{ .Values.settings.kasm }}
           - name: SELKIES_ENCODER
             value: {{ quote $encoder }}
           - name: SELKIES_ENABLE_RESIZE
