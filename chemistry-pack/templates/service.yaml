@@ -11,5 +11,19 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if not .Values.settings.kasm }}
+    - port: 3478
+      protocol: UDP
+      targetPort: turn
+      name: turn
+    - port: 65534
+      protocol: UDP
+      targetPort: turn-a
+      name: turn-a
+    - port: 65535
+      protocol: UDP
+      targetPort: turn-b
+      name: turn-b
+    {{- end }}
   selector:
     {{- include "chemistry-pack.selectorLabels" . | nindent 4 }}
