@@ -27,7 +27,7 @@ data:
   SELKIES_ENABLE_BASIC_AUTH: "true"
   SELKIES_ENABLE_HTTPS: "false"
   {{- if not .Values.settings.kasm }}
-  SELKIES_TURN_HOST: "192.168.0.1"
+  SELKIES_TURN_HOST: "192.168.0.141"
   SELKIES_TURN_PORT: "3478"
   SELKIES_TURN_PROTOCOL: "udp"
   SELKIES_TURN_TLS: "false"
