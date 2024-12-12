@@ -41,12 +41,11 @@ spec:
             - containerPort: 3478
               protocol: UDP
               name: turn
-            - containerPort: 65534
+            {{- range untilStep (int .Values.settings.turn.minPort) (int (add1 .Values.settings.turn.maxPort)) 1 }}
+            - containerPort: {{ . }}
               protocol: UDP
-              name: turn-a
-            - containerPort: 65535
-              protocol: UDP
-              name: turn-b
+              name: turn-{{ . }}
+            {{- end }}
             {{- end }}
           livenessProbe:
             httpGet:

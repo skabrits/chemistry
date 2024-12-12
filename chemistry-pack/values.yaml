@@ -48,14 +48,18 @@ ingress:
           pathType: Prefix
   tls:
   - hosts:
-    - ch.skabrits.duckdns.org
+    - example.com
     secretName: chem-tls-secret
 
 settings:
   user: slava
   password: Chem-123
   kasm: false
-  ip: 192.168.0.151
+  turn:
+    ip: 192.168.0.151
+    minPort: 65531
+    maxPort: 65535
+    host: ch.skabrits.duckdns.org
 
 pvc:
   mode: ReadWriteMany
