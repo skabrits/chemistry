@@ -2,6 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "chemistry-pack.fullname" . }}
+  {{- if not .Values.settings.kasm }}
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: {{ .Values.settings.ip }}
+  {{- end }}
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
 spec:

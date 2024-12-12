@@ -55,6 +55,7 @@ settings:
   user: slava
   password: Chem-123
   kasm: false
+  ip: 192.168.0.151
 
 pvc:
   mode: ReadWriteMany
