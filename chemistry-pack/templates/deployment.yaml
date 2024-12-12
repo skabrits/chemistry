@@ -48,6 +48,7 @@ spec:
             {{- end }}
             {{- end }}
           livenessProbe:
+            initialDelaySeconds: 10
             httpGet:
               path: {{ $ingressPATH }}
               port: http
@@ -55,6 +56,7 @@ spec:
               - name: Authorization
                 value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
           readinessProbe:
+            initialDelaySeconds: 10
             httpGet:
               path: {{ $ingressPATH }}
               port: http
