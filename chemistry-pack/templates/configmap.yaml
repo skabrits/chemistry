@@ -31,6 +31,6 @@ data:
   SELKIES_TURN_PORT: "3478"
   SELKIES_TURN_PROTOCOL: "udp"
   SELKIES_TURN_TLS: {{ if hasKey .Values.settings.turn "host" }}"true"{{ else }}"false"{{ end }}
-  TURN_MIN_PORT: {{ .Values.settings.turn.minPort }}
-  TURN_MAX_PORT: {{ .Values.settings.turn.maxPort }}
+  TURN_MIN_PORT: {{ .Values.settings.turn.minPort | quote }}
+  TURN_MAX_PORT: {{ .Values.settings.turn.maxPort | quote }}
   {{- end }}
