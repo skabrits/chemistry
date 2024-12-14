@@ -21,6 +21,9 @@ data:
   DISPLAY_REFRESH: "60"
   DISPLAY_DPI: "96"
   DISPLAY_CDEPTH: "24"
+  {{- if or (and (hasKey .Values.resources "requests") (hasKey .Values.resources.requests $IgpuKEY)) (and (hasKey .Values.resources "limits") (hasKey .Values.resources.limits $IgpuKEY)) }}
+  VGL_DISPLAY: /dev/dri/card1
+  {{- end }}
   KASMVNC_ENABLE: {{ quote .Values.settings.kasm }}
   SELKIES_ENCODER: {{ .Values.settings.encoder | default $encoder | quote }}
   SELKIES_ENABLE_RESIZE: "false"
