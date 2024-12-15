@@ -15,23 +15,14 @@ metadata:
 data:
   SELKIES_BASIC_AUTH_USER: {{ .Values.settings.user }}
   SELKIES_BASIC_AUTH_PASSWORD: {{ .Values.settings.password }}
-  TZ: "UTC"
-  DISPLAY_SIZEW: "1920"
-  DISPLAY_SIZEH: "1080"
-  DISPLAY_REFRESH: "60"
-  DISPLAY_DPI: "96"
-  DISPLAY_CDEPTH: "24"
   {{- if or (and (hasKey .Values.resources "requests") (hasKey .Values.resources.requests $IgpuKEY)) (and (hasKey .Values.resources "limits") (hasKey .Values.resources.limits $IgpuKEY)) }}
   VGL_DISPLAY: /dev/dri/card1
   {{- end }}
   KASMVNC_ENABLE: {{ quote .Values.settings.kasm }}
   SELKIES_ENCODER: {{ .Values.settings.encoder | default $encoder | quote }}
-  SELKIES_ENABLE_RESIZE: "false"
-  SELKIES_VIDEO_BITRATE: "8000"
-  SELKIES_FRAMERATE: "60"
-  SELKIES_AUDIO_BITRATE: "128000"
-  SELKIES_ENABLE_BASIC_AUTH: "true"
-  SELKIES_ENABLE_HTTPS: "false"
+  {{- with .Values.envs }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   {{- if not .Values.settings.kasm }}
   SELKIES_TURN_HOST: {{ .Values.settings.turn.host | default .Values.settings.turn.ip }}
   SELKIES_TURN_PORT: "3478"
