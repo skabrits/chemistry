@@ -30,8 +30,8 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-    filebrowser:
-      port: 81
+  filebrowser:
+    port: 81
 
 ingress:
   enabled: true
