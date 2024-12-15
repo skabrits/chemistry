@@ -73,13 +73,13 @@ settings:
   password: Chem-123
   kasm: false
   turn:
-    ip: 192.168.0.151
+    ip: 192.168.0.2
     minPort: 10000
     maxPort: 10020
-    host: ch.skabrits.duckdns.org
+    host: example.com
 
 pvc:
-  mode: ReadWriteMany
+  mode: ReadWriteOnce
   size: 40Gi
   cache:
     size: 20Gi
