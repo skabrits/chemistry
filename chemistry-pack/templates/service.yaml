@@ -2,14 +2,30 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "chemistry-pack.fullname" . }}
+  {{- if not .Values.settings.kasm }}
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: {{ .Values.settings.turn.ip }}
+  {{- end }}
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ if not .Values.settings.kasm }}LoadBalancer{{ else }}{{ .Values.service.type }}{{ end }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: https
+      targetPort: http
       protocol: TCP
-      name: https
+      name: http
+    {{- if not .Values.settings.kasm }}
+    - port: 3478
+      protocol: UDP
+      targetPort: turn
+      name: turn
+    {{- range untilStep (int .Values.settings.turn.minPort) (int (add1 .Values.settings.turn.maxPort)) 1 }}
+    - port: {{ . }}
+      protocol: UDP
+      targetPort: turn-{{ . }}
+      name: turn-{{ . }}
+    {{- end }}
+    {{- end }}
   selector:
     {{- include "chemistry-pack.selectorLabels" . | nindent 4 }}

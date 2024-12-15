@@ -35,12 +35,21 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8080
               protocol: TCP
-            - name: https
-              containerPort: 3001
-              protocol: TCP
+            {{- if not .Values.settings.kasm }}
+            - containerPort: 3478
+              protocol: UDP
+              name: turn
+            {{- range untilStep (int .Values.settings.turn.minPort) (int (add1 .Values.settings.turn.maxPort)) 1 }}
+            - containerPort: {{ . }}
+              protocol: UDP
+              name: turn-{{ . }}
+            {{- end }}
+            {{- end }}
           livenessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 10
             httpGet:
               path: {{ $ingressPATH }}
               port: http
@@ -48,6 +57,8 @@ spec:
               - name: Authorization
                 value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
           readinessProbe:
+            initialDelaySeconds: 30
+            failureThreshold: 10
             httpGet:
               path: {{ $ingressPATH }}
               port: http
@@ -56,35 +67,29 @@ spec:
                 value: Basic {{ printf "%s:%s" .Values.settings.user .Values.settings.password  | b64enc }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          stdin: true
+          tty: true
           envFrom:
           - configMapRef:
               name: environment-cm-{{ include "chemistry-pack.fullname" . }}
           volumeMounts:
-          - mountPath: "/config"
+          - mountPath: "/home/ubuntu"
             name: data-storage
-          # - name: service-config
-          #   mountPath: /custom-services.d
-          - name: script-config
-            mountPath: /custom-cont-init.d
+          - mountPath: /cache
+            name: cache-vol
           - mountPath: /dev/shm
             name: dshm
-            
       volumes:
       - name: dshm
         emptyDir:
           medium: "Memory"
           sizeLimit: 4Gi
+      - name: cache-vol
+        persistentVolumeClaim:
+          claimName: cache-pvc-{{ include "chemistry-pack.fullname" . }}
       - name: data-storage
         persistentVolumeClaim:
           claimName: pvc-{{ include "chemistry-pack.fullname" . }}
-      # - name: service-config
-      #   configMap:
-      #     name: service-cm-{{ include "chemistry-pack.fullname" . }}
-      #     defaultMode: 0777
-      - name: script-config
-        configMap:
-          name: script-cm-{{ include "chemistry-pack.fullname" . }}
-          defaultMode: 0777
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
