@@ -37,6 +37,9 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+            - name: file
+              containerPort: 9000
+              protocol: TCP
             {{- if not .Values.settings.kasm }}
             - containerPort: 3478
               protocol: UDP
