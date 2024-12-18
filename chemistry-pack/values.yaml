@@ -78,11 +78,12 @@ settings:
     maxPort: 65535
     host: example.com
 
-pvc:
+storage:
   mode: ReadWriteOnce
   size: 40Gi
   cache:
     size: 20Gi
+  shm: 8Gi
   storageClass: longhorn
 
 resources:

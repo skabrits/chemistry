@@ -6,8 +6,8 @@ metadata:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
 spec:
   accessModes:
-  - {{ .Values.pvc.mode }}
+  - {{ .Values.storage.mode }}
   resources:
     requests:
-      storage: {{ .Values.pvc.cache.size }}
-  storageClassName: {{ .Values.pvc.storageClass }}
+      storage: {{ .Values.storage.cache.size }}
+  storageClassName: {{ .Values.storage.storageClass }}

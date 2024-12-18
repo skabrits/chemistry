@@ -86,7 +86,7 @@ spec:
       - name: dshm
         emptyDir:
           medium: "Memory"
-          sizeLimit: 4Gi
+          sizeLimit: {{ .Values.storage.shm }}
       - name: cache-vol
         persistentVolumeClaim:
           claimName: cache-pvc-{{ include "chemistry-pack.fullname" . }}
