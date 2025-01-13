@@ -5,9 +5,11 @@ metadata:
   {{- if not .Values.settings.kasm }}
   annotations:
     metallb.universe.tf/loadBalancerIPs: {{ .Values.settings.turn.ip }}
+    tplink-ports.any-ports: "{{ .Values.settings.turn.minPort }}-{{ .Values.settings.turn.maxPort }}:,3478:3478"
   {{- end }}
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
+    tplink-ports: 1
 spec:
   type: {{ if not .Values.settings.kasm }}LoadBalancer{{ else }}{{ .Values.service.type }}{{ end }}
   ports:
