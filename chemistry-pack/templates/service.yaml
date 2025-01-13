@@ -9,7 +9,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
-    tplink-ports: 1
+    tplink-ports: "1"
 spec:
   type: {{ if not .Values.settings.kasm }}LoadBalancer{{ else }}{{ .Values.service.type }}{{ end }}
   ports:
