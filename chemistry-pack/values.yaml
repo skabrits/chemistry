@@ -77,7 +77,7 @@ settings:
     minPort: 65530
     maxPort: 65535
     host: example.com
-  hpc: true
+  hpc: false
 
 storage:
   mode: ReadWriteOnce
