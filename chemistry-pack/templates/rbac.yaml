@@ -1,0 +1,60 @@
+{{- if .Values.settings.hpc -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}
+rules:
+  - apiGroups: ["", "apps"]
+    resources: ["persistentvolumeclaims", "services", "statefulsets"]
+    verbs: ["get", "list", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}-rb
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "chemistry-pack.fullname" . }}-sa
+    namespace: {{ Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ include "chemistry-pack.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}-watch-nodes
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}-watch-rb
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "chemistry-pack.fullname" . }}-sa
+    namespace: {{ Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "chemistry-pack.fullname" . }}-watch-nodes
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}-sa
+secrets:
+  - name: {{ include "chemistry-pack.fullname" . }}-secret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "chemistry-pack.fullname" . }}-secret
+  annotations:
+    kubernetes.io/service-account.name: {{ include "chemistry-pack.fullname" . }}-sa
+type: kubernetes.io/service-account-token
+{{- end }}
