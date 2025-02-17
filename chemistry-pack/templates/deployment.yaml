@@ -40,6 +40,11 @@ spec:
             - name: file
               containerPort: 9000
               protocol: TCP
+            {{- if .Values.settings.hpc }}
+            - containerPort: 8888
+              protocol: TCP
+              name: hpc
+            {{- end }}
             {{- if not .Values.settings.kasm }}
             - containerPort: 3478
               protocol: UDP
