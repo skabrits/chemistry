@@ -26,7 +26,7 @@ kind: ClusterRole
 metadata:
   name: {{ include "chemistry-pack.fullname" . }}-watch-nodes
 rules:
-  - apiGroups: [""]
+  - apiGroups: ["", "metrics.k8s.io"]
     resources: ["nodes"]
     verbs: ["get", "list"]
 ---
