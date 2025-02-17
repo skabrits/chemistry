@@ -15,7 +15,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "chemistry-pack.fullname" . }}-sa
-    namespace: {{ Release.Namespace }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: {{ include "chemistry-pack.fullname" . }}
@@ -37,7 +37,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "chemistry-pack.fullname" . }}-sa
-    namespace: {{ Release.Namespace }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: {{ include "chemistry-pack.fullname" . }}-watch-nodes
