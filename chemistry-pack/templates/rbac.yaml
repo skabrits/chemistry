@@ -27,8 +27,11 @@ metadata:
   name: {{ include "chemistry-pack.fullname" . }}-watch-nodes
 rules:
   - apiGroups: ["", "metrics.k8s.io"]
-    resources: ["nodes", "nodes/stats", "nodes/metrics"]
-    verbs: ["get", "list", "describe", "watch"]
+    resources: ["nodes"]
+    verbs: ["get", "list", "describe"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["pods"]
+    verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
