@@ -28,7 +28,7 @@ metadata:
 rules:
   - apiGroups: ["", "metrics.k8s.io"]
     resources: ["nodes", "nodes/stats", "nodes/metrics"]
-    verbs: ["get", "list", "describe"]
+    verbs: ["get", "list", "describe", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
