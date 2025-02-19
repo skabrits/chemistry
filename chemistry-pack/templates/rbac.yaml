@@ -5,7 +5,7 @@ metadata:
   name: {{ include "chemistry-pack.fullname" . }}
 rules:
   - apiGroups: ["", "apps"]
-    resources: ["persistentvolumeclaims", "services", "statefulsets"]
+    resources: ["persistentvolumeclaims", "services", "statefulsets", "pods", "pods/log"]
     verbs: ["get", "list", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -33,11 +33,8 @@ rules:
     resources: ["pods"]
     verbs: ["get", "list"]
   - apiGroups: [""]
-    resources: ["pods", "pods/log"]
+    resources: ["pods"]
     verbs: ["list"]
-  - apiGroups: [""]
-    resources: ["pods/log"]
-    verbs: ["get"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
