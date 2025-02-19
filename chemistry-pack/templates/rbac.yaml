@@ -29,7 +29,7 @@ rules:
   - apiGroups: ["", "metrics.k8s.io"]
     resources: ["nodes"]
     verbs: ["get", "list", "describe"]
-  - apiGroups: ["metrics.k8s.io"]
+  - apiGroups: ["", "metrics.k8s.io"]
     resources: ["pods"]
     verbs: ["get", "list"]
 ---
