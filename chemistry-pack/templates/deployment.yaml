@@ -49,7 +49,7 @@ spec:
               name: hpc
             {{- end }}
             {{- if not .Values.settings.kasm }}
-            - containerPort: 3478
+            - containerPort: {{ .Values.settings.turn.basePort }}
               protocol: UDP
               name: turn
             {{- range untilStep (int .Values.settings.turn.minPort) (int (add1 .Values.settings.turn.maxPort)) 1 }}
