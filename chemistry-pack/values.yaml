@@ -74,6 +74,7 @@ settings:
   kasm: false
   turn:
     ip: 192.168.0.2
+    basePort: 3478
     minPort: 65530
     maxPort: 65535
     host: example.com
