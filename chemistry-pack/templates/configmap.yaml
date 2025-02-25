@@ -25,7 +25,7 @@ data:
   {{- end }}
   {{- if not .Values.settings.kasm }}
   SELKIES_TURN_HOST: {{ .Values.settings.turn.host | default .Values.settings.turn.ip }}
-  SELKIES_TURN_PORT: "3478"
+  SELKIES_TURN_PORT: {{ .Values.settings.turn.basePort | quote }}
   SELKIES_TURN_PROTOCOL: "udp"
   SELKIES_TURN_TLS: "false"
   TURN_MIN_PORT: {{ .Values.settings.turn.minPort | quote }}
