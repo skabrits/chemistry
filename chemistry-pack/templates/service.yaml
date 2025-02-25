@@ -5,7 +5,7 @@ metadata:
   {{- if not .Values.settings.kasm }}
   annotations:
     metallb.universe.tf/loadBalancerIPs: {{ .Values.settings.turn.ip }}
-    tplink-ports.any-ports: "{{ .Values.settings.turn.minPort }}-{{ .Values.settings.turn.maxPort }}:,3478:3478"
+    tplink-ports.any-ports: {{ if ne (int (add1 .Values.settings.turn.basePort)) (int .Values.settings.turn.minPort) }}"{{ .Values.settings.turn.minPort }}-{{ .Values.settings.turn.maxPort }}:,{{ .Values.settings.turn.basePort }}:{{ .Values.settings.turn.basePort }}"{{ else }}"{{ .Values.settings.turn.basePort }}-{{ .Values.settings.turn.maxPort }}:"{{ end }}
   {{- end }}
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
@@ -22,7 +22,7 @@ spec:
       protocol: TCP
       name: file
     {{- if not .Values.settings.kasm }}
-    - port: 3478
+    - port: {{ .Values.settings.turn.basePort }}
       protocol: UDP
       targetPort: turn
       name: turn
