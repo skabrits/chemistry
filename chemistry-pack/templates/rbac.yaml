@@ -5,7 +5,7 @@ metadata:
   name: {{ include "chemistry-pack.fullname" . }}
 rules:
   - apiGroups: ["", "apps"]
-    resources: ["persistentvolumeclaims", "services", "statefulsets", "pods", "pods/log", "pods/exec"]
+    resources: ["persistentvolumeclaims", "services", "statefulsets", "pods", "pods/log", "pods/exec", "configmaps"]
     verbs: ["get", "list", "create", "update", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
