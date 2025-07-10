@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: skabrits/chemistry-pack
+  repository: skabrits/chemistry-pack-hpc
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -30,8 +30,6 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-  filebrowser:
-    port: 81
 
 ingress:
   enabled: true
@@ -60,24 +58,11 @@ envs:
   DISPLAY_REFRESH: "60"
   DISPLAY_DPI: "96"
   DISPLAY_CDEPTH: "24"
-  BASE_URL: "/files"
-  SELKIES_ENABLE_RESIZE: "false"
-  SELKIES_VIDEO_BITRATE: "8000"
-  SELKIES_FRAMERATE: "60"
-  SELKIES_AUDIO_BITRATE: "128000"
-  SELKIES_ENABLE_BASIC_AUTH: "true"
-  SELKIES_ENABLE_HTTPS: "false"
 
 settings:
   user: admin
   password: admin
-  kasm: false
-  turn:
-    ip: 192.168.0.2
-    basePort: 3478
-    minPort: 65530
-    maxPort: 65535
-    host: example.com
+  host: example.com
   hpc: false
 
 storage:

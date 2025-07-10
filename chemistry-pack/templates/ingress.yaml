@@ -1,11 +1,9 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "chemistry-pack.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
-{{- $filePort := .Values.service.filebrowser.port -}}
-{{- $filePath := .Values.envs.BASE_URL -}}
-{{- $hostName := .Values.settings.turn.host | default "example.com" -}}
-{{- if hasKey .Values.settings.turn "host" }}
-  {{- $_ := set (index .Values.ingress.tls 0) "hosts" (list .Values.settings.turn.host) }}
+{{- $hostName := .Values.settings.host | default "example.com" -}}
+{{- if hasKey .Values.settings "host" }}
+  {{- $_ := set (index .Values.ingress.tls 0) "hosts" (list .Values.settings.host) }}
 {{- end}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -48,15 +46,6 @@ spec:
       http:
         paths:
           {{- range .paths }}
-          - path: {{ $filePath }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
-            {{- end }}
-            backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: {{ $filePort }}
           - path: {{ .path }}
             {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
             pathType: {{ .pathType }}

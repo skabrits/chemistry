@@ -40,23 +40,10 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - name: file
-              containerPort: 9000
-              protocol: TCP
             {{- if .Values.settings.hpc }}
             - containerPort: 8888
               protocol: TCP
               name: hpc
-            {{- end }}
-            {{- if not .Values.settings.kasm }}
-            - containerPort: {{ .Values.settings.turn.basePort }}
-              protocol: UDP
-              name: turn
-            {{- range untilStep (int .Values.settings.turn.minPort) (int (add1 .Values.settings.turn.maxPort)) 1 }}
-            - containerPort: {{ . }}
-              protocol: UDP
-              name: turn-{{ . }}
-            {{- end }}
             {{- end }}
           livenessProbe:
             initialDelaySeconds: 30
@@ -84,7 +71,7 @@ spec:
           - configMapRef:
               name: environment-cm-{{ include "chemistry-pack.fullname" . }}
           volumeMounts:
-          - mountPath: "/home/ubuntu"
+          - mountPath: "/config"
             name: data-storage
           - mountPath: /cache
             name: cache-vol
