@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "chemistry-pack.labels" . | nindent 4 }}
 data:
-  CUSTOM_PORT: 8080
+  CUSTOM_PORT: "8080"
   START_DOCKER: "false"
   CUSTOM_USER: {{ .Values.settings.user }}
   PASSWORD: {{ .Values.settings.password }}
