@@ -71,8 +71,8 @@ spec:
           - configMapRef:
               name: environment-cm-{{ include "chemistry-pack.fullname" . }}
           volumeMounts:
-          - mountPath: "/config"
-            name: data-storage
+          # - mountPath: "/config"
+          #   name: data-storage
           - mountPath: /cache
             name: cache-vol
           - mountPath: /dev/shm
